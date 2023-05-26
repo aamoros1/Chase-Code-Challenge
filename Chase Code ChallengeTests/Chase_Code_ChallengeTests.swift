@@ -2,10 +2,11 @@
 //  Chase_Code_ChallengeTests.swift
 //  Chase Code ChallengeTests
 //
-//  Created by Chris on 5/25/23.
+//  Created by Alex on 5/25/23.
 //
 
 import XCTest
+@testable import Chase_Code_Challenge
 
 final class Chase_Code_ChallengeTests: XCTestCase {
 

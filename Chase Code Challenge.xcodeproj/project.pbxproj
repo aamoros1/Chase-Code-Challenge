@@ -8,12 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		83C4E8402A1F6C40002D9DF1 /* Chase_Code_ChallengeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E83F2A1F6C40002D9DF1 /* Chase_Code_ChallengeApp.swift */; };
-		83C4E8422A1F6C40002D9DF1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8412A1F6C40002D9DF1 /* ContentView.swift */; };
 		83C4E8442A1F6C41002D9DF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83C4E8432A1F6C41002D9DF1 /* Assets.xcassets */; };
 		83C4E8482A1F6C41002D9DF1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83C4E8472A1F6C41002D9DF1 /* Preview Assets.xcassets */; };
 		83C4E8522A1F6C41002D9DF1 /* Chase_Code_ChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8512A1F6C41002D9DF1 /* Chase_Code_ChallengeTests.swift */; };
 		83C4E85C2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E85B2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITests.swift */; };
 		83C4E85E2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E85D2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITestsLaunchTests.swift */; };
+		83C4E86D2A1F84F3002D9DF1 /* CurrentForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E86C2A1F84F3002D9DF1 /* CurrentForecastView.swift */; };
+		83C4E86F2A1F8A21002D9DF1 /* WeatherServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E86E2A1F8A21002D9DF1 /* WeatherServices.swift */; };
+		83C4E8722A1F9597002D9DF1 /* NetworkComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 83C4E8712A1F9597002D9DF1 /* NetworkComponents */; };
+		83C4E8752A1F9909002D9DF1 /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8742A1F9909002D9DF1 /* LocationServices.swift */; };
+		83C4E8772A1FB910002D9DF1 /* WeatherResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8762A1FB910002D9DF1 /* WeatherResponseModel.swift */; };
+		83C4E8792A1FE6FE002D9DF1 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8782A1FE6FE002D9DF1 /* WeatherModel.swift */; };
+		83C4E87B2A1FF27B002D9DF1 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E87A2A1FF27B002D9DF1 /* WeatherViewModel.swift */; };
+		83C4E87D2A200AD8002D9DF1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E87C2A200AD8002D9DF1 /* SearchViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +43,6 @@
 /* Begin PBXFileReference section */
 		83C4E83C2A1F6C40002D9DF1 /* Chase Code Challenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chase Code Challenge.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C4E83F2A1F6C40002D9DF1 /* Chase_Code_ChallengeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chase_Code_ChallengeApp.swift; sourceTree = "<group>"; };
-		83C4E8412A1F6C40002D9DF1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		83C4E8432A1F6C41002D9DF1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83C4E8452A1F6C41002D9DF1 /* Chase_Code_Challenge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Chase_Code_Challenge.entitlements; sourceTree = "<group>"; };
 		83C4E8472A1F6C41002D9DF1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -45,6 +51,14 @@
 		83C4E8572A1F6C41002D9DF1 /* Chase Code ChallengeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Chase Code ChallengeUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		83C4E85B2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chase_Code_ChallengeUITests.swift; sourceTree = "<group>"; };
 		83C4E85D2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chase_Code_ChallengeUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		83C4E86C2A1F84F3002D9DF1 /* CurrentForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentForecastView.swift; sourceTree = "<group>"; };
+		83C4E86E2A1F8A21002D9DF1 /* WeatherServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherServices.swift; sourceTree = "<group>"; };
+		83C4E8732A1F97D6002D9DF1 /* Chase-Code-Challenge-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Chase-Code-Challenge-Info.plist"; sourceTree = SOURCE_ROOT; };
+		83C4E8742A1F9909002D9DF1 /* LocationServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
+		83C4E8762A1FB910002D9DF1 /* WeatherResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponseModel.swift; sourceTree = "<group>"; };
+		83C4E8782A1FE6FE002D9DF1 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		83C4E87A2A1FF27B002D9DF1 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		83C4E87C2A200AD8002D9DF1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83C4E8722A1F9597002D9DF1 /* NetworkComponents in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,8 +110,15 @@
 		83C4E83E2A1F6C40002D9DF1 /* Chase Code Challenge */ = {
 			isa = PBXGroup;
 			children = (
+				83C4E8732A1F97D6002D9DF1 /* Chase-Code-Challenge-Info.plist */,
 				83C4E83F2A1F6C40002D9DF1 /* Chase_Code_ChallengeApp.swift */,
-				83C4E8412A1F6C40002D9DF1 /* ContentView.swift */,
+				83C4E86C2A1F84F3002D9DF1 /* CurrentForecastView.swift */,
+				83C4E87C2A200AD8002D9DF1 /* SearchViewController.swift */,
+				83C4E86E2A1F8A21002D9DF1 /* WeatherServices.swift */,
+				83C4E87A2A1FF27B002D9DF1 /* WeatherViewModel.swift */,
+				83C4E8762A1FB910002D9DF1 /* WeatherResponseModel.swift */,
+				83C4E8782A1FE6FE002D9DF1 /* WeatherModel.swift */,
+				83C4E8742A1F9909002D9DF1 /* LocationServices.swift */,
 				83C4E8432A1F6C41002D9DF1 /* Assets.xcassets */,
 				83C4E8452A1F6C41002D9DF1 /* Chase_Code_Challenge.entitlements */,
 				83C4E8462A1F6C41002D9DF1 /* Preview Content */,
@@ -145,6 +167,9 @@
 			dependencies = (
 			);
 			name = "Chase Code Challenge";
+			packageProductDependencies = (
+				83C4E8712A1F9597002D9DF1 /* NetworkComponents */,
+			);
 			productName = "Chase Code Challenge";
 			productReference = 83C4E83C2A1F6C40002D9DF1 /* Chase Code Challenge.app */;
 			productType = "com.apple.product-type.application";
@@ -217,6 +242,9 @@
 				Base,
 			);
 			mainGroup = 83C4E8332A1F6C40002D9DF1;
+			packageReferences = (
+				83C4E8702A1F9597002D9DF1 /* XCRemoteSwiftPackageReference "NetworkComponents" */,
+			);
 			productRefGroup = 83C4E83D2A1F6C40002D9DF1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -259,7 +287,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83C4E8422A1F6C40002D9DF1 /* ContentView.swift in Sources */,
+				83C4E86D2A1F84F3002D9DF1 /* CurrentForecastView.swift in Sources */,
+				83C4E87B2A1FF27B002D9DF1 /* WeatherViewModel.swift in Sources */,
+				83C4E86F2A1F8A21002D9DF1 /* WeatherServices.swift in Sources */,
+				83C4E8772A1FB910002D9DF1 /* WeatherResponseModel.swift in Sources */,
+				83C4E8752A1F9909002D9DF1 /* LocationServices.swift in Sources */,
+				83C4E87D2A200AD8002D9DF1 /* SearchViewController.swift in Sources */,
+				83C4E8792A1FE6FE002D9DF1 /* WeatherModel.swift in Sources */,
 				83C4E8402A1F6C40002D9DF1 /* Chase_Code_ChallengeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,6 +453,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Chase-Code-Challenge-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your current location to get the weather for your current location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to get you your forecast.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -457,6 +495,10 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Chase-Code-Challenge-Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your current location to get the weather for your current location.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to get you your forecast.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -612,6 +654,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		83C4E8702A1F9597002D9DF1 /* XCRemoteSwiftPackageReference "NetworkComponents" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aamoros1/NetworkComponents";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		83C4E8712A1F9597002D9DF1 /* NetworkComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83C4E8702A1F9597002D9DF1 /* XCRemoteSwiftPackageReference "NetworkComponents" */;
+			productName = NetworkComponents;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83C4E8342A1F6C40002D9DF1 /* Project object */;
 }

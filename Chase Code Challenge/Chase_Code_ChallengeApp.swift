@@ -2,7 +2,7 @@
 //  Chase_Code_ChallengeApp.swift
 //  Chase Code Challenge
 //
-//  Created by Chris on 5/25/23.
+//  Created by Alex on 5/25/23.
 //
 
 import SwiftUI
@@ -11,7 +11,11 @@ import SwiftUI
 struct Chase_Code_ChallengeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CurrentForecastView()
+                .onAppear {
+                    /// Handle permissions for current location 
+                    LocationServices.shared.requestLocationAuthorization()
+                }
         }
     }
 }
