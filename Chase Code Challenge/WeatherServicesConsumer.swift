@@ -11,7 +11,7 @@ import CoreLocation
 //api key could be put more securely ie keychain
 fileprivate let apiKey = "671285b71ed522d79582600da9fd685f"
 
-enum WeatherURL {
+enum WeatherSearchType {
     case coordinates(CLLocationCoordinate2D)
     case cityName(String)
     case zipcode(String)
@@ -27,9 +27,14 @@ enum WeatherURL {
     }
 }
 
-actor WeatherServices {
+protocol WeatherServiceConsumeable: Actor {
+    func fetchWeatherWith<Model: Decodable>(type: WeatherSearchType) async throws -> Model?
+    func fetchWeatherWith<Model: Decodable>(urlString: String) async throws -> Model?
+}
+
+actor WeatherServicesConsumer: WeatherServiceConsumeable {
     
-    func fetchWeatherWith(type: WeatherURL) async throws -> WeatherResponseModel? {
+    func fetchWeatherWith<Model: Decodable>(type: WeatherSearchType) async throws -> Model? {
         let request = NetworkRequest(url: type.url, method: HttpMethod.get)
         request.responeType = WeatherResponseModel.self
         
@@ -40,14 +45,14 @@ actor WeatherServices {
         async let responseToken = try await networkService.process(request, content: nil)
         guard try await responseToken.waitForCompletion(for: 5000),
               let response = try await responseToken.result as? NetworkResponse,
-              let weatherResponseModel = response.content as? WeatherResponseModel else {
+              let weatherResponseModel = response.content as? Model else {
             return nil
         }
         return weatherResponseModel
     }
 
     /// This gets called when we have saved the latest successful request in which we can send a network request for forecast
-    func fetchWeatherWith(urlString: String) async throws -> WeatherResponseModel? {
+    func fetchWeatherWith<Model: Decodable>(urlString: String) async throws -> Model? {
         guard let urlRequest = URL(string: urlString) else {
             //  unable to get url from string
             return nil
@@ -64,7 +69,7 @@ actor WeatherServices {
         async let responseToken = try await networkService.process(request, content: nil)
         guard try await responseToken.waitForCompletion(for: 5000),
               let response = try await responseToken.result as? NetworkResponse,
-              let weatherResponseModel = response.content as? WeatherResponseModel else {
+              let weatherResponseModel = response.content as? Model else {
             return nil
         }
         return weatherResponseModel

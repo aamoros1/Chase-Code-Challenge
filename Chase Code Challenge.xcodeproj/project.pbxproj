@@ -14,7 +14,7 @@
 		83C4E85C2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E85B2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITests.swift */; };
 		83C4E85E2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E85D2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITestsLaunchTests.swift */; };
 		83C4E86D2A1F84F3002D9DF1 /* CurrentForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E86C2A1F84F3002D9DF1 /* CurrentForecastView.swift */; };
-		83C4E86F2A1F8A21002D9DF1 /* WeatherServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E86E2A1F8A21002D9DF1 /* WeatherServices.swift */; };
+		83C4E86F2A1F8A21002D9DF1 /* WeatherServicesConsumer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E86E2A1F8A21002D9DF1 /* WeatherServicesConsumer.swift */; };
 		83C4E8722A1F9597002D9DF1 /* NetworkComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 83C4E8712A1F9597002D9DF1 /* NetworkComponents */; };
 		83C4E8752A1F9909002D9DF1 /* LocationServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8742A1F9909002D9DF1 /* LocationServices.swift */; };
 		83C4E8772A1FB910002D9DF1 /* WeatherResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8762A1FB910002D9DF1 /* WeatherResponseModel.swift */; };
@@ -52,7 +52,7 @@
 		83C4E85B2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chase_Code_ChallengeUITests.swift; sourceTree = "<group>"; };
 		83C4E85D2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chase_Code_ChallengeUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		83C4E86C2A1F84F3002D9DF1 /* CurrentForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentForecastView.swift; sourceTree = "<group>"; };
-		83C4E86E2A1F8A21002D9DF1 /* WeatherServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherServices.swift; sourceTree = "<group>"; };
+		83C4E86E2A1F8A21002D9DF1 /* WeatherServicesConsumer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherServicesConsumer.swift; sourceTree = "<group>"; };
 		83C4E8732A1F97D6002D9DF1 /* Chase-Code-Challenge-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Chase-Code-Challenge-Info.plist"; sourceTree = SOURCE_ROOT; };
 		83C4E8742A1F9909002D9DF1 /* LocationServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServices.swift; sourceTree = "<group>"; };
 		83C4E8762A1FB910002D9DF1 /* WeatherResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponseModel.swift; sourceTree = "<group>"; };
@@ -114,7 +114,7 @@
 				83C4E83F2A1F6C40002D9DF1 /* Chase_Code_ChallengeApp.swift */,
 				83C4E86C2A1F84F3002D9DF1 /* CurrentForecastView.swift */,
 				83C4E87C2A200AD8002D9DF1 /* SearchViewController.swift */,
-				83C4E86E2A1F8A21002D9DF1 /* WeatherServices.swift */,
+				83C4E86E2A1F8A21002D9DF1 /* WeatherServicesConsumer.swift */,
 				83C4E87A2A1FF27B002D9DF1 /* WeatherViewModel.swift */,
 				83C4E8762A1FB910002D9DF1 /* WeatherResponseModel.swift */,
 				83C4E8782A1FE6FE002D9DF1 /* WeatherModel.swift */,
@@ -289,7 +289,7 @@
 			files = (
 				83C4E86D2A1F84F3002D9DF1 /* CurrentForecastView.swift in Sources */,
 				83C4E87B2A1FF27B002D9DF1 /* WeatherViewModel.swift in Sources */,
-				83C4E86F2A1F8A21002D9DF1 /* WeatherServices.swift in Sources */,
+				83C4E86F2A1F8A21002D9DF1 /* WeatherServicesConsumer.swift in Sources */,
 				83C4E8772A1FB910002D9DF1 /* WeatherResponseModel.swift in Sources */,
 				83C4E8752A1F9909002D9DF1 /* LocationServices.swift in Sources */,
 				83C4E87D2A200AD8002D9DF1 /* SearchViewController.swift in Sources */,

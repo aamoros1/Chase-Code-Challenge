@@ -14,13 +14,13 @@ typealias SearchType = SearchViewController.SearchType
 /// main functions used outside of the viewmodel could be extracted and set protocols in which could assist with using mock data or testing purposes
 final class WeatherViewModel: ObservableObject {
     @Published var weatherModel: WeatherModel?
-    private let weatherServices: WeatherServices
+    private let weatherServices: WeatherServiceConsumeable
     @Published var displayError = false
     @Published var displaySearchView = false
     var searchType: SearchType = .number
     
-    init() {
-        weatherServices = WeatherServices()
+    init(services: WeatherServiceConsumeable = WeatherServicesConsumer()) {
+        weatherServices = services
     }
     
     @MainActor
@@ -31,9 +31,9 @@ final class WeatherViewModel: ObservableObject {
             displayError = true
             return
         }
-        let type: WeatherURL = .coordinates(currentLocation.coordinate)
+        let type: WeatherSearchType = .coordinates(currentLocation.coordinate)
         
-        guard let model = try? await weatherServices.fetchWeatherWith(type: type) else {
+        guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: type) else {
             setDisplayErrorFlag()
             return
         }
@@ -46,7 +46,7 @@ final class WeatherViewModel: ObservableObject {
     func initialize() async {
         /// Fetch last request we did if not fetch the weather for current location
         if let lastLocationUrl = UserDefaults.standard.string(forKey: "lastRequest") {
-            guard let model = try? await weatherServices.fetchWeatherWith(urlString: lastLocationUrl) else {
+            guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(urlString: lastLocationUrl) else {
                 setDisplayErrorFlag()
                 return
             }
@@ -74,9 +74,9 @@ final class WeatherViewModel: ObservableObject {
             /// Handle any special characters so we can properly create a url
             let allowedCharacters = CharacterSet(charactersIn: "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789")
             let fixedString = inputText.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? inputText
-            let weatherServiceType = searchType == .number ? WeatherURL.zipcode(fixedString) : WeatherURL.cityName(fixedString)
+            let weatherServiceType: WeatherSearchType = searchType == .number ? .zipcode(fixedString) : .cityName(fixedString)
             
-            guard let model = try? await weatherServices.fetchWeatherWith(type: weatherServiceType) else {
+            guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: weatherServiceType) else {
                 /// we werent able to get a response and thus display error screen.
                 await setDisplayErrorFlag()
                 return
