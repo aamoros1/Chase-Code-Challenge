@@ -10,8 +10,6 @@ import Foundation
 
 typealias SearchType = SearchViewController.SearchType
 
-
-/// main functions used outside of the viewmodel could be extracted and set protocols in which could assist with using mock data or testing purposes
 final class WeatherViewModel: ObservableObject {
     @Published var weatherModel: WeatherModel?
     private let weatherServices: WeatherServiceConsumeable
@@ -23,38 +21,46 @@ final class WeatherViewModel: ObservableObject {
         weatherServices = services
     }
     
-    @MainActor
     func fetchCurrentLocation() async {
-        /// Could be better to handle logic to ask for permission if we cant get current location
-        guard let currentLocation = LocationServices.shared.currentLocation else {
-            print("something bad happen")
-            displayError = true
-            return
+        ///  Move Task to background to avoid priority inversion
+        Task(priority: .background) {
+            /// Could be better to handle logic to ask for permission if we cant get current location
+            guard let currentLocation = LocationServices.shared.currentLocation else {
+                print("something bad happen")
+                displayError = true
+                return
+            }
+            let type: WeatherSearchType = .coordinates(currentLocation.coordinate)
+            
+            guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: type) else {
+                await setDisplayErrorFlag()
+                return
+            }
+            /// Save our successful request to know what request was last done
+            UserDefaults.standard.set(type.url.description, forKey: "lastRequest")
+            await update(response: model)
         }
-        let type: WeatherSearchType = .coordinates(currentLocation.coordinate)
-        
-        guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: type) else {
-            setDisplayErrorFlag()
-            return
+    }
+
+    func initialize() async {
+        ///  Move Task to background to avoid priority inversion
+        Task(priority: .background) {
+            /// Fetch last request we did if not fetch the weather for current location
+            if let lastLocationUrl = UserDefaults.standard.string(forKey: "lastRequest") {
+                guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(urlString: lastLocationUrl) else {
+                    await setDisplayErrorFlag()
+                    return
+                }
+                await update(response: model)
+            } else {
+                await fetchCurrentLocation()
+            }
         }
-        /// Save our successful request to know what request was last done
-        UserDefaults.standard.set(type.url.description, forKey: "lastRequest")
-        weatherModel = WeatherModel(weatherResponseModel: model)
     }
 
     @MainActor
-    func initialize() async {
-        /// Fetch last request we did if not fetch the weather for current location
-        if let lastLocationUrl = UserDefaults.standard.string(forKey: "lastRequest") {
-            guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(urlString: lastLocationUrl) else {
-                setDisplayErrorFlag()
-                return
-            }
-            
-            weatherModel = WeatherModel(weatherResponseModel: model)
-        } else {
-            await fetchCurrentLocation()
-        }
+    private func update(response: WeatherResponseModel) {
+        weatherModel = WeatherModel(weatherResponseModel: response)
     }
 
     /// display search screen and set the given searchType either numbers or alphabetical
@@ -70,7 +76,8 @@ final class WeatherViewModel: ObservableObject {
     }
 
     func completionHanlder(inputText: String, searchType: SearchType) {
-        Task {
+        ///  Move Task to background to avoid priority inversion
+        Task(priority: .background) {
             /// Handle any special characters so we can properly create a url
             let allowedCharacters = CharacterSet(charactersIn: "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789")
             let fixedString = inputText.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? inputText
@@ -83,10 +90,7 @@ final class WeatherViewModel: ObservableObject {
             }
             /// Save the last request done successful so we can pull it out later when the user comes back
             UserDefaults.standard.set(weatherServiceType.url.description, forKey: "lastRequest")
-            DispatchQueue.main.async {
-                self.weatherModel = WeatherModel(weatherResponseModel: model)
-            }
-            
+            await update(response: model)
         }
     }
 }
