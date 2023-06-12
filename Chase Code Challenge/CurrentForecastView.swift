@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct CurrentForecastView: View {
-    @ObservedObject var viewModel = WeatherViewModel()
+    @StateObject var viewModel = WeatherViewModel()
     
     var body: some View {
         NavigationView{

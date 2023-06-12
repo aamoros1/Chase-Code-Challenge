@@ -7,25 +7,6 @@
 
 import Foundation
 import NetworkComponents
-import CoreLocation
-//api key could be put more securely ie keychain
-fileprivate let apiKey = "671285b71ed522d79582600da9fd685f"
-
-enum WeatherSearchType {
-    case coordinates(CLLocationCoordinate2D)
-    case cityName(String)
-    case zipcode(String)
-    var url: URL {
-        switch self {
-        case .cityName(let cityName):
-            return URL(string: "https://api.openweathermap.org/data/2.5/weather?q=\(cityName),us&appid=\(apiKey)")!
-        case .coordinates(let coordinate):
-            return URL(string: "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinate.latitude)&lon=\(coordinate.longitude)&appid=\(apiKey)")!
-        case .zipcode(let zipcode):
-            return URL(string: "https://api.openweathermap.org/data/2.5/weather?zip=\(zipcode)&appid=\(apiKey)")!
-        }
-    }
-}
 
 protocol WeatherServiceConsumeable: Actor {
     func fetchWeatherWith<Model: Decodable>(type: WeatherSearchType) async throws -> Model?
@@ -33,13 +14,17 @@ protocol WeatherServiceConsumeable: Actor {
 }
 
 actor WeatherServicesConsumer: WeatherServiceConsumeable {
+    private var networkService: BaseNetworkServiceProvider
+    private let interceptor = NetworkServiceIntercept()
+
+    init() {
+        networkService = BaseNetworkServiceProvider(config: .default)
+        networkService.interceptor = interceptor
+    }
     
     func fetchWeatherWith<Model: Decodable>(type: WeatherSearchType) async throws -> Model? {
         let request = NetworkRequest(url: type.url, method: HttpMethod.get)
         request.responeType = WeatherResponseModel.self
-        
-        let urlConfiguration = URLSessionConfiguration.default
-        let networkService = BaseNetworkServiceProvider(config: urlConfiguration)
         
         /// wait for 5 seconds for the response if no response returns nil
         async let responseToken = try await networkService.process(request, content: nil)
@@ -57,13 +42,8 @@ actor WeatherServicesConsumer: WeatherServiceConsumeable {
             //  unable to get url from string
             return nil
         }
-        print(urlRequest)
         let request = NetworkRequest(url: urlRequest, method: HttpMethod.get)
         request.responeType = WeatherResponseModel.self
-        
-        /// pass the sessionconfiguration needed for our basenetworkserviceprovider
-        let urlConfiguration = URLSessionConfiguration.default
-        let networkService = BaseNetworkServiceProvider(config: urlConfiguration)
 
         /// wait for 5 seconds for the response if no response returns nil
         async let responseToken = try await networkService.process(request, content: nil)
