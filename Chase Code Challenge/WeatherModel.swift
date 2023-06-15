@@ -7,11 +7,13 @@
 
 import Foundation
 
-class WeatherModel {
+struct WeatherModel {
     private let weatherResponseModel: WeatherResponseModel
+    private let unitTemperature: UnitTemperature
     
-    init(weatherResponseModel: WeatherResponseModel) {
+    init(weatherResponseModel: WeatherResponseModel, unitTemperature: UnitTemperature) {
         self.weatherResponseModel = weatherResponseModel
+        self.unitTemperature = unitTemperature
     }
     
     var city: String {
@@ -37,25 +39,25 @@ class WeatherModel {
         /// since the values we have are in kelvin we could convert it to fahrenheit and give us the proper value
         measurementFormatter.string(from: Measurement(value: weatherResponseModel.main.feelsLike,
                                                       unit: UnitTemperature.kelvin)
-            .converted(to: .fahrenheit))
+            .converted(to: unitTemperature))
     }
 
     var currentTemp: String {
         measurementFormatter.string(from: Measurement(value: weatherResponseModel.main.temp,
                                                       unit: UnitTemperature.kelvin)
-            .converted(to: .fahrenheit))
+            .converted(to: unitTemperature))
     }
     
     var highTemp: String {
         measurementFormatter.string(from: Measurement(value: weatherResponseModel.main.tempMax,
                                                       unit: UnitTemperature.kelvin)
-            .converted(to: .fahrenheit))
+            .converted(to: unitTemperature))
     }
     
     var lowTemp: String {
         measurementFormatter.string(from: Measurement(value: weatherResponseModel.main.tempMin,
                                                       unit: UnitTemperature.kelvin)
-            .converted(to: .fahrenheit))
+            .converted(to: unitTemperature))
     }
 
     var imageName: String {
@@ -63,11 +65,11 @@ class WeatherModel {
     }
 
     /// Formatter to handle decimal placement for given values
-    private lazy var measurementFormatter: MeasurementFormatter = {
+    private let measurementFormatter: MeasurementFormatter = {
         let measurementFormatter = MeasurementFormatter()
-        measurementFormatter.unitStyle = .short
+        measurementFormatter.unitStyle = .medium
         measurementFormatter.numberFormatter.maximumFractionDigits = 1
-        measurementFormatter.unitOptions = .temperatureWithoutUnit
+        measurementFormatter.unitOptions = .providedUnit
         return measurementFormatter
     }()
 }

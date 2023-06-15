@@ -61,9 +61,32 @@ struct CurrentForecastView: View {
                         } label: {
                             Label("Search by city", systemImage: "location.viewfinder")
                         }
-
+                        Section {
+                            Button{
+                                viewModel.tappedFarenheitCelciousButton(changedTo: .celsius)
+                            } label: {
+                                Label {
+                                    Text("Celsius (°C)")
+                                } icon: {
+                                    if viewModel.unitTemperature == .celsius {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                            Button {
+                                viewModel.tappedFarenheitCelciousButton(changedTo: .fahrenheit)
+                            } label: {
+                                Label {
+                                    Text("Fahrenheit (°F)")
+                                } icon: {
+                                    if viewModel.unitTemperature == .fahrenheit {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                        }
                     } label: {
-                        Label("Search", systemImage: "magnifyingglass")
+                        Image(systemName: "ellipsis.circle")
                     }
                 }
             }

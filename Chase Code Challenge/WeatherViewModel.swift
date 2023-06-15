@@ -12,9 +12,11 @@ typealias SearchType = SearchViewController.SearchType
 
 final class WeatherViewModel: ObservableObject {
     @Published var weatherModel: WeatherModel?
+    private var response: WeatherResponseModel!
     private let weatherServices: WeatherServiceConsumeable
     @Published var displayError = false
     @Published var displaySearchView = false
+    var unitTemperature: UnitTemperature = .fahrenheit
     var searchType: SearchType = .number
     
     init(services: WeatherServiceConsumeable = WeatherServicesConsumer()) {
@@ -38,7 +40,7 @@ final class WeatherViewModel: ObservableObject {
             }
             /// Save our successful request to know what request was last done
             UserDefaults.standard.set(type.url.description, forKey: "lastRequest")
-            await update(response: model)
+            await update(with: model)
         }
     }
 
@@ -51,7 +53,7 @@ final class WeatherViewModel: ObservableObject {
                     await setDisplayErrorFlag()
                     return
                 }
-                await update(response: model)
+                await update(with: model)
             } else {
                 await fetchCurrentLocation()
             }
@@ -59,8 +61,15 @@ final class WeatherViewModel: ObservableObject {
     }
 
     @MainActor
-    private func update(response: WeatherResponseModel) {
-        weatherModel = WeatherModel(weatherResponseModel: response)
+    private func update(with: WeatherResponseModel) {
+        response = with
+        weatherModel = WeatherModel(weatherResponseModel: with, unitTemperature: unitTemperature)
+    }
+
+    @MainActor
+    func tappedFarenheitCelciousButton(changedTo: UnitTemperature) -> Void {
+        unitTemperature = changedTo
+        update(with: response)
     }
 
     /// display search screen and set the given searchType either numbers or alphabetical
@@ -90,7 +99,9 @@ final class WeatherViewModel: ObservableObject {
             }
             /// Save the last request done successful so we can pull it out later when the user comes back
             UserDefaults.standard.set(weatherServiceType.url.description, forKey: "lastRequest")
-            await update(response: model)
+            await update(with: model)
         }
     }
 }
+
+extension UnitTemperature: @unchecked Sendable { }
