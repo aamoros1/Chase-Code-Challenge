@@ -9,7 +9,7 @@ import Foundation
 
 struct WeatherResponseModel: Codable {
     let coord: Coord
-    let weather: [Weather]
+    let weathers: [Weather]
     let base: String
     let main: Main
     let visibility: Int
@@ -21,6 +21,17 @@ struct WeatherResponseModel: Codable {
     let id: Int
     let name: String
     let cod: Int
+    var imageData: Data!
+    var weather: Weather {
+        weathers.first!
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case coord
+        case weathers = "weather"
+        case base, main, visibility, wind, clouds, dt
+        case sys, timezone, id, name, cod
+    }
 }
 
 // MARK: - Clouds

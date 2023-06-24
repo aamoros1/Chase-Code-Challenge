@@ -22,9 +22,11 @@ struct CurrentForecastView: View {
                     .bold()
                 Text("High: \(viewModel.weatherModel?.highTemp ?? "")   Low: \(viewModel.weatherModel?.lowTemp ?? "")")
                 VStack {
-                    Image(viewModel.weatherModel?.imageName ?? "")
-                        .resizable()
-                        .frame(width: 80, height: 80)
+                    if let imageData = viewModel.weatherModel?.imageData {
+                        Image(uiImage: .init(data: imageData)!)
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                    }
                     Text(viewModel.weatherModel?.currentWeather ?? "")
                         .font(.headline)
                         .padding()

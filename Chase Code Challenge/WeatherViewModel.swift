@@ -34,10 +34,11 @@ final class WeatherViewModel: ObservableObject {
             }
             let type: WeatherSearchType = .coordinates(currentLocation.coordinate)
             
-            guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: type) else {
+            guard var model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: type) else {
                 await setDisplayErrorFlag()
                 return
             }
+            model.imageData = await weatherServices.fetchImageData(from: model.weather.icon)
             /// Save our successful request to know what request was last done
             UserDefaults.standard.set(type.url.description, forKey: "lastRequest")
             await update(with: model)
@@ -49,10 +50,12 @@ final class WeatherViewModel: ObservableObject {
         Task(priority: .background) {
             /// Fetch last request we did if not fetch the weather for current location
             if let lastLocationUrl = UserDefaults.standard.string(forKey: "lastRequest") {
-                guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(urlString: lastLocationUrl) else {
+                guard var model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(urlString: lastLocationUrl) else {
                     await setDisplayErrorFlag()
                     return
                 }
+                model.imageData = await weatherServices.fetchImageData(from: model.weather.icon)
+                
                 await update(with: model)
             } else {
                 await fetchCurrentLocation()
@@ -92,11 +95,12 @@ final class WeatherViewModel: ObservableObject {
             let fixedString = inputText.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? inputText
             let weatherServiceType: WeatherSearchType = searchType == .number ? .zipcode(fixedString) : .cityName(fixedString)
             
-            guard let model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: weatherServiceType) else {
+            guard var model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: weatherServiceType) else {
                 /// we werent able to get a response and thus display error screen.
                 await setDisplayErrorFlag()
                 return
             }
+            model.imageData = await weatherServices.fetchImageData(from: model.weather.icon)
             /// Save the last request done successful so we can pull it out later when the user comes back
             UserDefaults.standard.set(weatherServiceType.url.description, forKey: "lastRequest")
             await update(with: model)

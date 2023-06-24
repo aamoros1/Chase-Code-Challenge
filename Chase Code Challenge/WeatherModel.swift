@@ -21,7 +21,7 @@ struct WeatherModel {
     }
 
     var currentWeather: String {
-        weatherResponseModel.weather.first?.description ?? ""
+        weatherResponseModel.weather.description
     }
     var sunrise: String {
         Date(timeIntervalSince1970: TimeInterval(weatherResponseModel.sys.sunrise))
@@ -60,8 +60,8 @@ struct WeatherModel {
             .converted(to: unitTemperature))
     }
 
-    var imageName: String {
-        weatherResponseModel.weather.first?.icon ?? ""
+    var imageData: Data {
+        weatherResponseModel.imageData
     }
 
     /// Formatter to handle decimal placement for given values
