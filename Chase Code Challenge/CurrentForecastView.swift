@@ -19,8 +19,12 @@ struct CurrentForecastView: View {
                     .font(.largeTitle)
                     .bold()
                 Text(viewModel.weatherModel?.currentTemp ?? "")
-                    .bold()
-                Text("High: \(viewModel.weatherModel?.highTemp ?? "")   Low: \(viewModel.weatherModel?.lowTemp ?? "")")
+                    .font(.system(size: 72))
+                HStack {
+                    Text("High: \(viewModel.weatherModel?.highTemp ?? "")")
+                    Text("Low: \(viewModel.weatherModel?.lowTemp ?? "")")
+                }
+                .accessibilityElement(children: .combine)
                 VStack {
                     if let imageData = viewModel.weatherModel?.imageData {
                         Image(uiImage: .init(data: imageData)!)
@@ -93,6 +97,25 @@ struct CurrentForecastView: View {
                 }
             }
         }
+        .alert("Error", isPresented: $viewModel.displayError, presenting: viewModel.error) { error in
+            switch error {
+            case .noValidZipcode:
+                Button("Search", action: {viewModel.tappedSearchButton(searchType: .number)})
+                Button("cancel", action: cancelAction)
+            case .cityNotFound:
+                Button("Search", action: {viewModel.tappedSearchButton(searchType: .string)})
+                Button("cancel", action: cancelAction)
+            case .timeout:
+                Button("Try Again", action: {viewModel.tappedSearchButton(searchType: .number)})
+                Button("Cacel", action: cancelAction)
+            case .failedToDecode(_):
+                Button("Ok", action: cancelAction)
+            case .locationServiceOff:
+                Button("Ok", action: cancelAction)
+            }
+        } message: { error in
+            Text(error.message)
+        }
         .alert("Error", isPresented: $viewModel.displayError, actions: {
             /// Could be expanded by setting three different errors one for handling zipcode, city not found, and possibly network issue
             Button("Ok") {
@@ -112,5 +135,9 @@ struct CurrentForecastView: View {
                 await viewModel.initialize()
             }
         }
+    }
+
+    private func cancelAction() {
+        viewModel.displayError.toggle()
     }
 }

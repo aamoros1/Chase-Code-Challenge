@@ -9,8 +9,8 @@ import Foundation
 import NetworkComponents
 
 protocol WeatherServiceConsumeable: Actor {
-    func fetchWeatherWith<Model: Decodable>(type: WeatherSearchType) async throws -> Model?
-    func fetchWeatherWith<Model: Decodable>(urlString: String) async throws -> Model?
+    func fetchWeatherWith<Model: WeatherResponseModeable>(type: WeatherSearchType) async throws -> Result<Model, WeatherServiceError>
+    func fetchWeatherWith<Model: WeatherResponseModeable>(urlString: String) async throws -> Result<Model, WeatherServiceError>
     func fetchImageData(from iconName: String) async -> Data?
     var imageCacheManager: ImageCacheManager { get }
 }
@@ -30,37 +30,57 @@ actor WeatherServicesConsumer: WeatherServiceConsumeable {
         networkService.interceptor = interceptor
     }
     
-    func fetchWeatherWith<Model: Decodable>(type: WeatherSearchType) async throws -> Model? {
+    func fetchWeatherWith<Model: WeatherResponseModeable>(type: WeatherSearchType) async throws -> Result<Model, WeatherServiceError> {
         let request = NetworkRequest(url: type.url, method: HttpMethod.get)
         request.responeType = Model.self
         
         /// wait for 5 seconds for the response if no response returns nil
-        async let responseToken = try await networkService.process(request, content: nil)
-        guard try await responseToken.waitForCompletion(for: 5000),
-              let response = try await responseToken.result as? NetworkResponse,
-              let weatherResponseModel = response.content as? Model else {
-            return nil
+        async let responseToken = try! await networkService.process(request, content: nil)
+        guard
+            await responseToken.waitForCompletion(for: 5000),
+              let response = await responseToken.result as? NetworkResponse
+        else {
+            return .failure(.timeout)
         }
-        return weatherResponseModel
+        guard
+            let weatherResponseModel = response.content as? Model
+        else {
+            return .failure(.failedToDecode(response.error))
+        }
+        if let errorMessage = weatherResponseModel.message {
+            return .failure(.cityNotFound(errorMessage))
+        }
+        return .success(weatherResponseModel)
     }
 
     /// This gets called when we have saved the latest successful request in which we can send a network request for forecast
-    func fetchWeatherWith<Model: Decodable>(urlString: String) async throws -> Model? {
-        guard let urlRequest = URL(string: urlString) else {
+    func fetchWeatherWith<Model: WeatherResponseModeable>(urlString: String) async throws -> Result<Model, WeatherServiceError> {
+        guard
+            let urlRequest = URL(string: urlString)
+        else {
             //  unable to get url from string
-            return nil
+            fatalError("error handling saved string in UserDefaults")
         }
         let request = NetworkRequest(url: urlRequest, method: HttpMethod.get)
         request.responeType = Model.self
 
         /// wait for 5 seconds for the response if no response returns nil
-        async let responseToken = try await networkService.process(request, content: nil)
-        guard try await responseToken.waitForCompletion(for: 5000),
-              let response = try await responseToken.result as? NetworkResponse,
-              let weatherResponseModel = response.content as? Model else {
-            return nil
+        async let responseToken = try! await networkService.process(request, content: nil)
+        guard
+            await responseToken.waitForCompletion(for: 5000),
+              let response = await responseToken.result as? NetworkResponse
+        else {
+            return .failure(.timeout)
         }
-        return weatherResponseModel
+        guard
+            let weatherResponseModel = response.content as? Model
+        else {
+            return .failure(.failedToDecode(response.error))
+        }
+        if let errorMessage = weatherResponseModel.message {
+            return .failure(.cityNotFound(errorMessage))
+        }
+        return .success(weatherResponseModel)
     }
 
     func fetchImageData(from iconName: String) async -> Data? {

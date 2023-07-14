@@ -60,7 +60,7 @@ struct WeatherModel {
             .converted(to: unitTemperature))
     }
 
-    var imageData: Data {
+    var imageData: Data? {
         weatherResponseModel.imageData
     }
 

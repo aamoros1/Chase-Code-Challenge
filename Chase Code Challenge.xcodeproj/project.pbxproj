@@ -24,6 +24,7 @@
 		83C4E8792A1FE6FE002D9DF1 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E8782A1FE6FE002D9DF1 /* WeatherModel.swift */; };
 		83C4E87B2A1FF27B002D9DF1 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E87A2A1FF27B002D9DF1 /* WeatherViewModel.swift */; };
 		83C4E87D2A200AD8002D9DF1 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C4E87C2A200AD8002D9DF1 /* SearchViewController.swift */; };
+		83CCDE5D2A47AFCC008C5C3E /* HumidityTileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CCDE5C2A47AFCC008C5C3E /* HumidityTileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		83C4E8782A1FE6FE002D9DF1 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		83C4E87A2A1FF27B002D9DF1 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		83C4E87C2A200AD8002D9DF1 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		83CCDE5C2A47AFCC008C5C3E /* HumidityTileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumidityTileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				83C4E8732A1F97D6002D9DF1 /* Chase-Code-Challenge-Info.plist */,
 				83C4E83F2A1F6C40002D9DF1 /* Chase_Code_ChallengeApp.swift */,
 				83C4E86C2A1F84F3002D9DF1 /* CurrentForecastView.swift */,
+				83CCDE5E2A47AFD7008C5C3E /* Views */,
 				83C4E87C2A200AD8002D9DF1 /* SearchViewController.swift */,
 				83C4E86E2A1F8A21002D9DF1 /* WeatherServicesConsumer.swift */,
 				83469C742A376D2A00DFB758 /* WeatherSearchType.swift */,
@@ -158,6 +161,14 @@
 				83C4E85D2A1F6C41002D9DF1 /* Chase_Code_ChallengeUITestsLaunchTests.swift */,
 			);
 			path = "Chase Code ChallengeUITests";
+			sourceTree = "<group>";
+		};
+		83CCDE5E2A47AFD7008C5C3E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				83CCDE5C2A47AFCC008C5C3E /* HumidityTileView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +314,7 @@
 				83C4E8772A1FB910002D9DF1 /* WeatherResponseModel.swift in Sources */,
 				83C4E8752A1F9909002D9DF1 /* LocationServices.swift in Sources */,
 				83469C752A376D2A00DFB758 /* WeatherSearchType.swift in Sources */,
+				83CCDE5D2A47AFCC008C5C3E /* HumidityTileView.swift in Sources */,
 				83C4E87D2A200AD8002D9DF1 /* SearchViewController.swift in Sources */,
 				83C4E8792A1FE6FE002D9DF1 /* WeatherModel.swift in Sources */,
 				839E556F2A3B801700E2C937 /* ImageCacheManager.swift in Sources */,

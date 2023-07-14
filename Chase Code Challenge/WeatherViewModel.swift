@@ -10,8 +10,32 @@ import Foundation
 
 typealias SearchType = SearchViewController.SearchType
 
+enum WeatherServiceError: Error {
+    case timeout
+    case noValidZipcode
+    case cityNotFound(String)
+    case failedToDecode(Error?)
+    case locationServiceOff
+
+    var message: String {
+        switch self {
+        case .timeout:
+            return "Session timed out"
+        case .cityNotFound(let errorMessage):
+            return "Error: \(errorMessage)"
+        case .noValidZipcode:
+            return "no valid zipcode"
+        case .failedToDecode(let error):
+            return "error: \(error?.localizedDescription ?? "")"
+        case .locationServiceOff:
+            return "Please enable share location back on"
+        }
+    }
+}
+
 final class WeatherViewModel: ObservableObject {
     @Published var weatherModel: WeatherModel?
+    @Published var error: WeatherServiceError? = nil
     private var response: WeatherResponseModel!
     private let weatherServices: WeatherServiceConsumeable
     @Published var displayError = false
@@ -28,20 +52,22 @@ final class WeatherViewModel: ObservableObject {
         Task(priority: .background) {
             /// Could be better to handle logic to ask for permission if we cant get current location
             guard let currentLocation = LocationServices.shared.currentLocation else {
-                print("something bad happen")
-                displayError = true
+                /// TODO: handle location permisions errors
+                await setDisplayErrorFlag(with: .locationServiceOff)
                 return
             }
             let type: WeatherSearchType = .coordinates(currentLocation.coordinate)
             
-            guard var model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: type) else {
-                await setDisplayErrorFlag()
-                return
+            let result: Result<WeatherResponseModel, WeatherServiceError> = try! await weatherServices.fetchWeatherWith(type: type)
+            switch result {
+            case .success(var responseModel):
+                responseModel.imageData = await weatherServices.fetchImageData(from: responseModel.weather.icon)
+                /// Save our successful request to know what request was last done
+                UserDefaults.standard.set(type.url.description, forKey: "lastRequest")
+                await update(with: responseModel)
+            case .failure(let error):
+                await setDisplayErrorFlag(with: error)
             }
-            model.imageData = await weatherServices.fetchImageData(from: model.weather.icon)
-            /// Save our successful request to know what request was last done
-            UserDefaults.standard.set(type.url.description, forKey: "lastRequest")
-            await update(with: model)
         }
     }
 
@@ -50,13 +76,15 @@ final class WeatherViewModel: ObservableObject {
         Task(priority: .background) {
             /// Fetch last request we did if not fetch the weather for current location
             if let lastLocationUrl = UserDefaults.standard.string(forKey: "lastRequest") {
-                guard var model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(urlString: lastLocationUrl) else {
-                    await setDisplayErrorFlag()
-                    return
+                let result: Result<WeatherResponseModel, WeatherServiceError> = try! await weatherServices.fetchWeatherWith(urlString: lastLocationUrl)
+                switch result {
+                case .success(var responseModel):
+                    responseModel.imageData = await weatherServices.fetchImageData(from: responseModel.weather.icon)
+                    await update(with: responseModel)
+                case .failure(let error):
+                    await setDisplayErrorFlag(with: error)
                 }
-                model.imageData = await weatherServices.fetchImageData(from: model.weather.icon)
                 
-                await update(with: model)
             } else {
                 await fetchCurrentLocation()
             }
@@ -83,8 +111,9 @@ final class WeatherViewModel: ObservableObject {
     }
 
     @MainActor
-    private func setDisplayErrorFlag() {
+    private func setDisplayErrorFlag(with error: WeatherServiceError) {
         displayError = true
+        self.error = error
     }
 
     func completionHanlder(inputText: String, searchType: SearchType) {
@@ -95,15 +124,15 @@ final class WeatherViewModel: ObservableObject {
             let fixedString = inputText.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? inputText
             let weatherServiceType: WeatherSearchType = searchType == .number ? .zipcode(fixedString) : .cityName(fixedString)
             
-            guard var model: WeatherResponseModel = try? await weatherServices.fetchWeatherWith(type: weatherServiceType) else {
-                /// we werent able to get a response and thus display error screen.
-                await setDisplayErrorFlag()
-                return
+            let result: Result<WeatherResponseModel, WeatherServiceError> = try! await weatherServices.fetchWeatherWith(type: weatherServiceType)
+            
+            switch result {
+            case .success(var responseModel):
+                responseModel.imageData = await weatherServices.fetchImageData(from: responseModel.weather.icon)
+                await update(with: responseModel)
+            case .failure(let error):
+                await setDisplayErrorFlag(with: error)
             }
-            model.imageData = await weatherServices.fetchImageData(from: model.weather.icon)
-            /// Save the last request done successful so we can pull it out later when the user comes back
-            UserDefaults.standard.set(weatherServiceType.url.description, forKey: "lastRequest")
-            await update(with: model)
         }
     }
 }
