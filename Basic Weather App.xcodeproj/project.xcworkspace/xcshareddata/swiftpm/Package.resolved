@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "networkcomponents",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/aamoros1/NetworkComponents",
+      "state" : {
+        "branch" : "main",
+        "revision" : "a0ba857e199a804312ae2556fea17464b95caaa6"
+      }
+    }
+  ],
+  "version" : 2
+}

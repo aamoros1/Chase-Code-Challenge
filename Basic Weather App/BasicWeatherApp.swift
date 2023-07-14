@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct Chase_Code_ChallengeApp: App {
+struct BasicWeatherApp: App {
     var body: some Scene {
         WindowGroup {
             CurrentForecastView()
