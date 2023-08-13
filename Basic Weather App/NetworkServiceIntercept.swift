@@ -16,7 +16,7 @@ final class NetworkServiceIntercept: NetworkServiceInterceptor {
         return key
     }()
     func inspect(request: NetworkRequest) {
-        request.queryParams = ["appid" : apiKey]
+        request.queryParams?["appid"] = apiKey
     }
     
     func securityHeaders(for request: NetworkRequest, containing body: Data?) -> [String : String]? { nil }

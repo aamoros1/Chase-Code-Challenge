@@ -1,0 +1,44 @@
+{
+  "coord": {
+    "lon": -96.6959,
+    "lat": 33.18
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01d"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 302.56,
+    "feels_like": 305.43,
+    "temp_min": 300.89,
+    "temp_max": 304.02,
+    "pressure": 1014,
+    "humidity": 63
+  },
+  "visibility": 10000,
+  "wind": {
+    "speed": 3.58,
+    "deg": 163,
+    "gust": 7.15
+  },
+  "clouds": {
+    "all": 0
+  },
+  "dt": 1691933960,
+  "sys": {
+    "type": 2,
+    "id": 2021825,
+    "country": "US",
+    "sunrise": 1691927289,
+    "sunset": 1691975724
+  },
+  "timezone": -18000,
+  "id": 4689871,
+  "name": "Fairview",
+  "cod": 200
+}

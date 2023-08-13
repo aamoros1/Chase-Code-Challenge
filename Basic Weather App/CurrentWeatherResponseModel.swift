@@ -26,9 +26,9 @@ protocol WeatherModelable: Decodable {
     var name: String { get }
 }
 
-protocol WeatherResponseModeable: Response & WeatherModelable { }
+protocol CurrentWeatherDataModeable: Response & WeatherModelable { }
 
-struct WeatherResponseModel: WeatherResponseModeable {
+struct CurrentWeatherResponseModel: CurrentWeatherDataModeable {
     let coord: Coord
     let weathers: [Weather]
     let base: String

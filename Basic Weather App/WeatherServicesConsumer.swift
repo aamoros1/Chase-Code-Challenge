@@ -9,9 +9,18 @@ import Foundation
 import NetworkComponents
 
 protocol WeatherServiceConsumeable: Actor {
-    func fetchWeatherWith<Model: WeatherResponseModeable>(type: WeatherSearchType) async throws -> Result<Model, WeatherServiceError>
-    func fetchWeatherWith<Model: WeatherResponseModeable>(urlString: String) async throws -> Result<Model, WeatherServiceError>
-    func fetchImageData(from iconName: String) async -> Data?
+    func fetchCurrentWeatherWith<Model: Response>(
+        type: WeatherServiceSearch,
+        _ numberOfDays: Days?)
+    async -> Result<Model, WeatherServiceError>
+
+    func fetchCurrentWeatherWith<Model: CurrentWeatherDataModeable>(
+        urlString: String)
+    async -> Result<Model, WeatherServiceError>
+
+    func fetchImageData(
+        from iconName: String)
+    async -> Data?
     var imageCacheManager: ImageCacheManager { get }
 }
 
@@ -30,12 +39,30 @@ actor WeatherServicesConsumer: WeatherServiceConsumeable {
         networkService.interceptor = interceptor
     }
     
-    func fetchWeatherWith<Model: WeatherResponseModeable>(type: WeatherSearchType) async throws -> Result<Model, WeatherServiceError> {
-        let request = NetworkRequest(url: type.url, method: HttpMethod.get)
+    func fetchCurrentWeatherWith<Model: Response>(
+        type: WeatherServiceSearch,
+        _ numberOfDays: Days? = nil)
+    async -> Result<Model, WeatherServiceError>
+    {
+        let request = NetworkRequest(url: EnvironmentService.baseWeatherURL, method: HttpMethod.get)
+        request.queryParams = [:]
+        switch type {
+        case .cityName(let city):
+            request.queryParams?["q"] = city
+        case .coordinates(let coordinates):
+            request.queryParams?["lon"] = coordinates.longitude.description
+            request.queryParams?["lat"] = coordinates.latitude.description
+        case .zipcode(let zipcode):
+            request.queryParams?["zip"] = zipcode
+        }
+
+        if let numberOfDays = numberOfDays {
+            request.queryParams?["cnt"] = numberOfDays.count.description
+        }
         request.responeType = Model.self
         
         /// wait for 5 seconds for the response if no response returns nil
-        async let responseToken = try! await networkService.process(request, content: nil)
+        async let responseToken = await networkService.process(request, content: nil)
         guard
             await responseToken.waitForCompletion(for: 5000),
               let response = await responseToken.result as? NetworkResponse
@@ -54,7 +81,10 @@ actor WeatherServicesConsumer: WeatherServiceConsumeable {
     }
 
     /// This gets called when we have saved the latest successful request in which we can send a network request for forecast
-    func fetchWeatherWith<Model: WeatherResponseModeable>(urlString: String) async throws -> Result<Model, WeatherServiceError> {
+    func fetchCurrentWeatherWith<Model: CurrentWeatherDataModeable>(
+        urlString: String)
+    async -> Result<Model, WeatherServiceError>
+    {
         guard
             let urlRequest = URL(string: urlString)
         else {
@@ -62,10 +92,11 @@ actor WeatherServicesConsumer: WeatherServiceConsumeable {
             fatalError("error handling saved string in UserDefaults")
         }
         let request = NetworkRequest(url: urlRequest, method: HttpMethod.get)
+        request.queryParams = [:]
         request.responeType = Model.self
 
         /// wait for 5 seconds for the response if no response returns nil
-        async let responseToken = try! await networkService.process(request, content: nil)
+        async let responseToken = await networkService.process(request, content: nil)
         guard
             await responseToken.waitForCompletion(for: 5000),
               let response = await responseToken.result as? NetworkResponse
@@ -80,6 +111,7 @@ actor WeatherServicesConsumer: WeatherServiceConsumeable {
         if let errorMessage = weatherResponseModel.message {
             return .failure(.cityNotFound(errorMessage))
         }
+        UserDefaults.standard.set(response.url, forKey: "lastRequest")
         return .success(weatherResponseModel)
     }
 

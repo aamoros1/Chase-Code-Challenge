@@ -8,10 +8,10 @@
 import Foundation
 
 struct WeatherModel {
-    private let weatherResponseModel: WeatherResponseModel
+    private let weatherResponseModel: CurrentWeatherResponseModel
     private let unitTemperature: UnitTemperature
     
-    init(weatherResponseModel: WeatherResponseModel, unitTemperature: UnitTemperature) {
+    init(weatherResponseModel: CurrentWeatherResponseModel, unitTemperature: UnitTemperature) {
         self.weatherResponseModel = weatherResponseModel
         self.unitTemperature = unitTemperature
     }

@@ -35,7 +35,7 @@ struct CurrentForecastView: View {
                         .font(.headline)
                         .padding()
                 }
-                    
+
                 HStack(spacing: 20) {
                     VStack {
                         Image(systemName: "sunrise.fill")
@@ -116,14 +116,6 @@ struct CurrentForecastView: View {
         } message: { error in
             Text(error.message)
         }
-        .alert("Error", isPresented: $viewModel.displayError, actions: {
-            /// Could be expanded by setting three different errors one for handling zipcode, city not found, and possibly network issue
-            Button("Ok") {
-                viewModel.displayError = false
-            }
-        }, message: {
-            Text("Sorry we couldn't find the city or zipcode request")
-        })
         .sheet(isPresented: $viewModel.displaySearchView, onDismiss: {
             viewModel.displaySearchView = false
         }) {

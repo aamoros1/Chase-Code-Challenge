@@ -6,7 +6,34 @@
 //
 
 import XCTest
-@testable import Chase_Code_Challenge
+@testable import Basic_Weather_App
+
+actor MockWeatherServiceConsumer: WeatherServiceConsumeable {
+
+    func fetchCurrentWeatherWith<Model>(
+        type: WeatherServiceSearch,
+        _ numberOfDays: Days?)
+    async -> Result<Model, WeatherServiceError> where Model : Response
+    {
+        try! await Task.sleep(nanoseconds: 1000000000)
+        return .success(CurrentWeatherResponseModel.mockCurrentWeather as! Model)
+    }
+
+    func fetchCurrentWeatherWith<Model>(
+        urlString: String)
+    async -> Result<Model, WeatherServiceError> where Model : CurrentWeatherDataModeable
+    {
+        try! await Task.sleep(nanoseconds: 1000000000)
+        return .success(CurrentWeatherResponseModel.mockCurrentWeather as! Model)
+    }
+
+    func fetchImageData(
+        from iconName: String)
+    async -> Data?
+    {
+        nil
+    }
+}
 
 final class Chase_Code_ChallengeTests: XCTestCase {
 
@@ -18,12 +45,16 @@ final class Chase_Code_ChallengeTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testExample() async throws {
+        let service = MockWeatherServiceConsumer()
+        let result: Result<CurrentWeatherResponseModel, WeatherServiceError> = await service.fetchCurrentWeatherWith(type: .zipcode(""), nil)
+        
+        switch result {
+        case .success(let model):
+            print(model.name)
+        default:
+            return
+        }
     }
 
     func testPerformanceExample() throws {
@@ -32,5 +63,6 @@ final class Chase_Code_ChallengeTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
 }
+
+

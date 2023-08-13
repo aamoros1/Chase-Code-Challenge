@@ -36,7 +36,7 @@ enum WeatherServiceError: Error {
 final class WeatherViewModel: ObservableObject {
     @Published var weatherModel: WeatherModel?
     @Published var error: WeatherServiceError? = nil
-    private var response: WeatherResponseModel!
+    private var response: CurrentWeatherResponseModel!
     private let weatherServices: WeatherServiceConsumeable
     @Published var displayError = false
     @Published var displaySearchView = false
@@ -56,14 +56,13 @@ final class WeatherViewModel: ObservableObject {
                 await setDisplayErrorFlag(with: .locationServiceOff)
                 return
             }
-            let type: WeatherSearchType = .coordinates(currentLocation.coordinate)
+            let type: WeatherServiceSearch = .coordinates(currentLocation.coordinate)
             
-            let result: Result<WeatherResponseModel, WeatherServiceError> = try! await weatherServices.fetchWeatherWith(type: type)
+            let result: Result<CurrentWeatherResponseModel, WeatherServiceError> = await weatherServices.fetchCurrentWeatherWith(type: type, nil)
             switch result {
             case .success(var responseModel):
                 responseModel.imageData = await weatherServices.fetchImageData(from: responseModel.weather.icon)
                 /// Save our successful request to know what request was last done
-                UserDefaults.standard.set(type.url.description, forKey: "lastRequest")
                 await update(with: responseModel)
             case .failure(let error):
                 await setDisplayErrorFlag(with: error)
@@ -76,7 +75,7 @@ final class WeatherViewModel: ObservableObject {
         Task(priority: .background) {
             /// Fetch last request we did if not fetch the weather for current location
             if let lastLocationUrl = UserDefaults.standard.string(forKey: "lastRequest") {
-                let result: Result<WeatherResponseModel, WeatherServiceError> = try! await weatherServices.fetchWeatherWith(urlString: lastLocationUrl)
+                let result: Result<CurrentWeatherResponseModel, WeatherServiceError> = await weatherServices.fetchCurrentWeatherWith(urlString: lastLocationUrl)
                 switch result {
                 case .success(var responseModel):
                     responseModel.imageData = await weatherServices.fetchImageData(from: responseModel.weather.icon)
@@ -92,7 +91,7 @@ final class WeatherViewModel: ObservableObject {
     }
 
     @MainActor
-    private func update(with: WeatherResponseModel) {
+    private func update(with: CurrentWeatherResponseModel) {
         response = with
         weatherModel = WeatherModel(weatherResponseModel: with, unitTemperature: unitTemperature)
     }
@@ -122,9 +121,9 @@ final class WeatherViewModel: ObservableObject {
             /// Handle any special characters so we can properly create a url
             let allowedCharacters = CharacterSet(charactersIn: "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789")
             let fixedString = inputText.addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? inputText
-            let weatherServiceType: WeatherSearchType = searchType == .number ? .zipcode(fixedString) : .cityName(fixedString)
+            let weatherServiceType: WeatherServiceSearch = searchType == .number ? .zipcode(fixedString) : .cityName(fixedString)
             
-            let result: Result<WeatherResponseModel, WeatherServiceError> = try! await weatherServices.fetchWeatherWith(type: weatherServiceType)
+            let result: Result<CurrentWeatherResponseModel, WeatherServiceError> = await weatherServices.fetchCurrentWeatherWith(type: weatherServiceType, nil)
             
             switch result {
             case .success(var responseModel):
